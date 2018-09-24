@@ -1,0 +1,122 @@
+﻿body {
+    font-family: Calibri;
+    color: black;
+}
+
+h1 {
+    font-family: Calibri;
+    font-style: italic;
+    font-size: 40px;
+    color: #c8111e;
+    font-weight: lighter;
+}
+
+h2 {
+    font-family: Calibri;
+    color: #7d060e;
+    font-weight: lighter;
+    font-size: 20px;
+}
+
+#btnPoc, #btnRez, #btnLogOut, #adminPanel, #reportPanel {
+    background: #7d060e;
+    border: 0px;
+    padding: 10px;
+    color: white;
+    font-family: Calibri;   
+    width:100%;
+}
+
+
+
+*{
+   list-style:none;
+   text-decoration:none;
+}
+
+.side-content {
+    position: fixed;   
+    background-color: #c8111e;
+    text-align:center;
+    padding:3px;
+    width:345px;
+    height:100%;
+    left:0;
+    top:0;
+    overflow: hidden;
+}
+
+.menu{
+  width:0px;
+  height:100%;
+  background-color: #c8111e;
+  position:fixed;
+  left:0;
+  margin-top: 25%;
+  border: none;
+  -webkit-transition: width 0.5s ease-in-out;
+  -moz-transition: width 0.5s ease-in-out;
+  -o-transition: width 0.5s ease-in-out;
+  transition: width 0.5s ease-in-out;
+  overflow: hidden;
+}
+
+.menu.is-visible{
+  width:350px;
+  -webkit-transition: width 0.5s ease-in-out;
+    -moz-transition: width 0.5s ease-in-out;
+    -o-transition: width 0.5s ease-in-out;
+    transition: width 0.5s ease-in-out;
+}
+
+#menu-button {
+  background: #c8111e;
+  border: 0px;
+  padding: 10px;
+  color: white;
+  font-family: Calibri;
+  width: 15%;
+  right:0%;
+}
+
+#tblInfo{
+    padding: 2px;
+    text-align: left;
+    font-family: Calibri;
+    color: #c8111e;  
+    width: 50%;
+}
+
+th {
+    color: #c8111e; 
+}
+td {
+    color: black;
+}
+
+#form1 {
+     margin-left: 25%;
+}
+
+button{  
+  position: fixed;
+  bottom:0%;  
+}
+
+#GridView1, #GridView2 {
+    background-color: #fffdf3;
+    font-family: Calibri;
+    color: #c8111e;
+    padding: 10px;
+    width: 85%;
+    text-align:left;
+
+}
+
+h3 {
+    font-family: Calibri;
+    color: white;
+    font-weight: lighter;
+    text-align:center;
+    font-size: 20px;
+}

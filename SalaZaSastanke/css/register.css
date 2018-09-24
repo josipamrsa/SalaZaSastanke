@@ -1,0 +1,42 @@
+﻿body {
+    font-family: Calibri;
+    color: black;
+}
+
+#reVal1, #rfVal1,  #rfVal2, #rfVal3, #rfVal4, #rfVal5{
+    color: #c8111e;
+    font-family: Calibri;
+}
+
+#valSumm1, #Label1 {
+    font-size: 17px;
+    font-family: Calibri;
+    color: #c8111e;
+}
+
+h1 {
+    font-family: Calibri;
+    font-style: italic;
+    font-size: 40px;
+    color: #c8111e;
+    font-weight: lighter;
+}
+
+#btnRegs, #btnBack {
+    background: #c8111e;
+    border: 0px;
+    padding: 10px;
+    color: white;
+    font-family: Calibri;
+}
+
+#kImeTbx, #imeTbx, #prezimeTbx, #mailTbx, #telTbx, #ttlTbx  {
+    border: 0px;
+    -webkit-box-shadow: inset 0 0 2px #808080;
+    -webkit-border-radius: 2px;
+    -moz-box-shadow: inset 0 0 2px #808080;
+    -moz-border-radius: 2px;
+    box-shadow: inset 0 0 2px #808080;
+    border-radius: 2px;
+    padding: 5px;
+}

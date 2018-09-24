@@ -9,6 +9,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Web.Script.Serialization;
+using System.Net.Mail;
 
 public partial class Rezervacija : System.Web.UI.Page
 {  
@@ -23,8 +24,12 @@ public partial class Rezervacija : System.Web.UI.Page
         DropDownList1.Visible = false;
         GridView1.Visible = false;
         GridView2.Visible = false;
-        btnEnd.Visible = false;      
+        btnEnd.Visible = false;
+        par.Visible = false;
+        par2.Visible = false;
+        emailInvite.Visible = false;
 
+        eventDate.Attributes["min"] = DateTime.Today.Date.ToString("yyyy-MM-dd");                    
     }
 
     protected void btnProvjeriDvorane_Click(object sender, EventArgs e)
@@ -38,7 +43,10 @@ public partial class Rezervacija : System.Web.UI.Page
         DropDownList1.Visible = true;
         GridView1.Visible = true;
         GridView2.Visible = true;
-        btnEnd.Visible = true;               
+        btnEnd.Visible = true;
+        par.Visible = true;
+        par2.Visible = true;
+        emailInvite.Visible = true;
     }
 
     public string getUserID(string username)
@@ -129,12 +137,11 @@ public partial class Rezervacija : System.Web.UI.Page
                 cmd.Connection.Close();
             }
         }
-
         
     }
 
     protected void btnEnd_Click(object sender, EventArgs e)
-    {
+    {                 
         int reservationID = 0;
         if (DropDownList1.SelectedIndex > -1)
         {
@@ -177,7 +184,37 @@ public partial class Rezervacija : System.Web.UI.Page
         sendInvitationConfirmation(reservationID);            
         Response.Redirect("Pocetna.aspx");
     }
-    
-       
-    
+
+
+    private void sendConfMail(TextBox email, int rez, Label l)
+    {
+        if (email.Text != "")
+        {
+            MailMessage mm = new MailMessage();
+            mm.From = new MailAddress("sso.rezervacije@tommy.hr");
+            string[] mails = email.Text.Split(',');
+
+            foreach(string m in mails)
+            {
+                mm.To.Add(new MailAddress(m));
+                mm.Subject = "Poziv na sastanak";
+                mm.Body = @"Poštovanje, 
+                            Pozivamo vas na sastanak.";
+
+            }         
+            SmtpClient client = new SmtpClient();
+            client.UseDefaultCredentials = false;
+            //client.Host = "smtp.gmail.com";
+            client.Port = 587;
+            client.EnableSsl = true;
+            //client.Credentials = new NetworkCredential("sso.apprezervacije", "Nak0nN0ciD0laziDan");
+            client.Send(mm);
+            Label1.Text = "poslano";
+        }
+    }
+
+    protected void btnBack_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("Pocetna.aspx");
+    }
 }

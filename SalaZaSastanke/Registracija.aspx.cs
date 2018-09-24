@@ -80,4 +80,9 @@ public partial class Registracija : System.Web.UI.Page
             Response.Redirect("Login.aspx");
         }
     }
+
+    protected void btnBack_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("Login.aspx");
+    }
 }

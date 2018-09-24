@@ -9,11 +9,14 @@ using System.Web;
 public class Participant
 {
     public string userName { get; set; }
+    public string dateEvent { get; set; }
     public string beginPeriod { get; set; }
     public string endPeriod { get; set; }
     public string location { get; set; }
     public string address { get; set; }
     public string hallName { get; set; }
+    public int confId { get; set; }
+    public string eventInfo { get; set; }
     public Participant()
     {
         

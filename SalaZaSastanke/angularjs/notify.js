@@ -11,16 +11,11 @@ app.controller("inviteController", function ($scope, $http) {
     })
 
          .then(function (response) {
-             $scope.userInvite = response.data;
-             //TODO
-
-             // Izlistati podatke u tablicu/neku strukturu dobivene iz response
-             // Kreirati 2 nove forme - checkbox/link/button za prihvaćanje/odbijanje 
-             // Ovisno o tome koju korisnik označi/odabere, vrijednost za prihvat se sprema, skupa sa odgovorom i tokenom, u potvrdu
-             // Kasnije se s profila moze naknadno mijenjati zeli li korisnik doći na sastanak
-
+             $scope.userInvite = response.data;            
          });
+            
 });
+
 
 app.controller('mainController', function ($scope) {
 });

@@ -50,7 +50,7 @@ public partial class Login : System.Web.UI.Page
     {    
         try
         {           
-            bool checkDB = CheckForUserDB(korisnickoIme.Text, Label2);
+            bool checkDB = CheckForUserDB(korisnickoIme.Text, lblInfo);
             PrincipalContext ADserv = new PrincipalContext(ContextType.Domain, "192.168.252.4", "sso.apprezervacije", "Nak0nN0ciD0laziDan");
             UserPrincipal byUName = UserPrincipal.FindByIdentity(ADserv, IdentityType.UserPrincipalName, korisnickoIme.Text);
                      
@@ -64,17 +64,17 @@ public partial class Login : System.Web.UI.Page
             
             if (byUName != null)
             {
-                bool userExistsInDB = CheckForUserAD(byUName, Label2);
+                bool userExistsInDB = CheckForUserAD(byUName, lblInfo);
 
                 if (!userExistsInDB)
                 {
                     try {
-                        InputNewUser(byUName, Label2);
+                        InputNewUser(byUName, lblInfo);
                         Session["squery"] = NewToken();
-                        Session["user_id"] = getUserID(byUName, Label2);
+                        Session["user_id"] = korisnickoIme.Text; // izmijeniti da dobavljamo samo korisnicko ime, a ne korisnicki ID u bazi
                         Response.Redirect("Pocetna.aspx");
                     }
-                    catch (Exception ec) { Label2.Text = "Pogreska pri unosu u bazu: "+ec.Message; }                                                    
+                    catch (Exception ec) { lblInfo.Text = "Pogreska pri unosu u bazu: "+ec.Message; }                                                    
                 }
 
                 else
@@ -85,10 +85,10 @@ public partial class Login : System.Web.UI.Page
                 }
             }
 
-            else { Label2.Text += "Nepostojeći korisnik - ukoliko zelite unijeti novog korisnika, kliknite \"Registracija\"."; }
+            else { lblInfo.Text += "Nepostojeći korisnik - ukoliko zelite unijeti novog korisnika, kliknite \"Registracija\"."; }
             
         }
-        catch (Exception ex) { Label2.Text = ex.Message; }
+        catch (Exception ex) { lblInfo.Text = ex.Message; }
     }
 
     public string getUserID(UserPrincipal uName, Label lblMessage)

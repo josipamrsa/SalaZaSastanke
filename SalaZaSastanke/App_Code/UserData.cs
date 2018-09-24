@@ -122,9 +122,10 @@ public class WebService : System.Web.Services.WebService
 
             foreach (int i in reservationID)
             {
-                string sqlQuery = @"SELECT PeriodOd, PeriodDo, d.Lokacija, d.Adresa, d.NazivDvorane
-                                FROM Rezervacija r, Dvorana d
-                                WHERE r.RezervacijaID = @IDRez AND r.IDDvorana = d.DvoranaID";
+                string sqlQuery = @"SELECT PeriodOd, PeriodDo, d.Lokacija, d.Adresa, d.NazivDvorane, p.PotvrdaID, r.OpisDogadjaja
+                                FROM Rezervacija r, Dvorana d, Potvrda p
+                                WHERE r.RezervacijaID = @IDRez AND p.Email = @Mail AND r.IDDvorana = d.DvoranaID 
+                                AND r.RezervacijaID = p.IDRezervacija AND p.KorisnikJeOdgovorio IS NULL";
 
                 string CS = ConfigurationManager.ConnectionStrings["Rezervacija"].ConnectionString;
                 using (SqlConnection con = new SqlConnection(CS))
@@ -133,6 +134,7 @@ public class WebService : System.Web.Services.WebService
                     SqlCommand cmd = new SqlCommand(sqlQuery, con);
                     cmd.CommandType = CommandType.Text;
                     cmd.Parameters.AddWithValue("@IDRez", i);
+                    cmd.Parameters.AddWithValue("@Mail", invitedName);
                     con.Open();
                     SqlDataReader rdr = cmd.ExecuteReader();
 
@@ -140,17 +142,24 @@ public class WebService : System.Web.Services.WebService
                     {
                         Participant ps = new Participant();
                         ps.userName = Session["user_id"].ToString();
-                        ps.beginPeriod = rdr["PeriodOd"].ToString();
-                        ps.endPeriod = rdr["PeriodDo"].ToString();
+                        string[] dateSplit = new string[4];
+                        dateSplit = rdr["PeriodOd"].ToString().Split(' ');                      
+                        ps.dateEvent = dateSplit[0];
+                        ps.beginPeriod = dateSplit[1];
+                        dateSplit = rdr["PeriodDo"].ToString().Split(' ');                        
+                        ps.endPeriod = dateSplit[1];
                         ps.location = rdr["Lokacija"].ToString();
                         ps.address = rdr["Adresa"].ToString();
                         ps.hallName = rdr["NazivDvorane"].ToString();
+                        ps.eventInfo = rdr["OpisDogadjaja"].ToString();
+                        ps.confId = Convert.ToInt32(rdr["PotvrdaID"]);
                         userInvitations.Add(ps);
                     }
                 }
 
                 
             }
+
             JavaScriptSerializer js = new JavaScriptSerializer();
             Context.Response.Write(js.Serialize(userInvitations));
         }
@@ -163,55 +172,5 @@ public class WebService : System.Web.Services.WebService
     }
 }
 
-     /*
-    [WebMethod(EnableSession = true)]
-    public void loadUserInvitations()
-    {
-        List<Participant> userInvitations = new List<Participant>();
-
-        if (Session["user-list"] == null && Session["rid"] == null)
-        {
-            return;
-        }
-        
-        int reservationID = Convert.ToInt32(Session["rid"]);
-        List<string> users = (List<string>)Session["user-list"];
-
-        foreach (string u in users)
-        {
-            {
-                string sqlQuery = @"SELECT PeriodOd, PeriodDo, d.Lokacija, d.Adresa, d.NazivDvorane
-                            FROM Rezervacija r, Dvorana d
-                            WHERE r.RezervacijaID = @IDRez AND r.IDDvorana = d.DvoranaID";
-
-                string CS = ConfigurationManager.ConnectionStrings["Rezervacija"].ConnectionString;
-                using (SqlConnection con = new SqlConnection(CS))
-                {
-                    SqlCommand cmd = new SqlCommand(sqlQuery, con);
-                    cmd.CommandType = CommandType.Text;
-                    cmd.Parameters.AddWithValue("@IDRez", reservationID);
-                    con.Open();
-                    SqlDataReader rdr = cmd.ExecuteReader();
-
-                    while (rdr.Read())
-                    {
-                        Participant ps = new Participant();
-                        ps.userName = u;
-                        ps.beginPeriod = rdr["PeriodOd"].ToString();
-                        ps.endPeriod = rdr["PeriodDo"].ToString();
-                        ps.location = rdr["Lokacija"].ToString();
-                        ps.address = rdr["Adresa"].ToString();
-                        ps.hallName = rdr["NazivDvorane"].ToString();
-                        userInvitations.Add(ps);
-                    }
-                }
-            }
-
-
-            JavaScriptSerializer js = new JavaScriptSerializer();
-            Context.Response.Write(js.Serialize(userInvitations));
-
-        }
-    }*/
-
+  
 

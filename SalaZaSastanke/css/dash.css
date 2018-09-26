@@ -1,5 +1,5 @@
 ﻿body {
-    margin-top: 0%;
+    margin-top: 0%;    
 }
 
 li{
@@ -8,8 +8,7 @@ li{
 }
 
 button{  
-  position: fixed;
-  bottom:0%;  
+  position: fixed; 
 }
 
 h1 {
@@ -53,8 +52,8 @@ td {
     position: fixed;   
     background-color: #c8111e;
     text-align:center;
-    padding:3px;
-    width:345px;
+    padding:0px;
+    width:23%;
     height:100%;
     left:0;
     top:0;
@@ -62,45 +61,66 @@ td {
 }
 
 .menu{
-  width:0px;
-  height:100%;
+  width:23%;
+  height:0px;
   background-color: #c8111e;
   position:fixed;
   left:0;
-  margin-top: 25%;
+  margin-top: 3%;
   border: none;
-  -webkit-transition: width 0.5s ease-in-out;
-  -moz-transition: width 0.5s ease-in-out;
-  -o-transition: width 0.5s ease-in-out;
-  transition: width 0.5s ease-in-out;
+  -webkit-transition: height 0.5s ease-in-out;
+  -moz-transition: height 0.5s ease-in-out;
+  -o-transition: height 0.5s ease-in-out;
+  transition: height 0.5s ease-in-out;
   overflow: hidden;
 }
 
 .menu.is-visible{
-  width:350px;
-  -webkit-transition: width 0.5s ease-in-out;
-    -moz-transition: width 0.5s ease-in-out;
-    -o-transition: width 0.5s ease-in-out;
-    transition: width 0.5s ease-in-out;
+  width:23%;
+  height: 100%;
+  -webkit-transition: height 0.5s ease-in-out;
+  -moz-transition: height 0.5s ease-in-out;
+  -o-transition: height 0.5s ease-in-out;
+  transition: height 0.5s ease-in-out;
 }
 
 #menu-button {
-  background: #c8111e;
+  background: none;
   border: 0px;
   padding: 10px;
   color: white;
   font-family: Calibri;
   width: 10%;
-  right:0%;
+  left:0%;
+  top:10%;
 }
 
-#btnProf, #btnRez, #btnLogOut, #adminPanel, #reportPanel {
+#btnProf, #btnRez, #btnLogOut, #reportPanel {
     background: #7d060e;
     border: 0px;
+    border-bottom: 1px #3a0407; 
     padding: 10px;
     color: white;
     font-family: Calibri;   
     width:100%;
+    -webkit-transition: background 0.5s ease-in-out;
+    -moz-transition: background 0.5s ease-in-out;
+    -o-transition: background 0.5s ease-in-out;
+    transition: background 0.5s ease-in-out;
+}
+
+#btnProf:hover, #btnRez:hover, #btnLogOut:hover, #reportPanel:hover {
+    background: #fff5a4;    
+    color: #7d060e;   
+    -webkit-transition: background 0.5s ease-in-out;
+    -moz-transition: background 0.5s ease-in-out;
+    -o-transition: background 0.5s ease-in-out;
+    transition: background 0.5s ease-in-out;
+}
+
+#btnLogOut {
+    background-color: #9f0b15;
+    border-bottom: 1px #7d060e;
 }
 
 #btnPotvrdi, #btnOdbij {
@@ -112,6 +132,10 @@ td {
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
     border-radius: 2px;
+}
+
+#btnPotvrdi {
+    background-color: darkseagreen;
 }
 
 #form1 {
@@ -129,16 +153,25 @@ td {
 
 #loginInfo {
     top: 0%;
-    margin-top: 20%;
+    margin-top: 0%;
+    margin-bottom: 5%;
     color: white;
     font-family: Calibri;
+    font-size: 20px;
 }
 
-#lblInfo {
+#lblInfo, #noNewEvents {
     font-family: Calibri;
     color: #c8111e;
 }
 
+#info {
+    font-family: Calibri;
+    font-size: 13px;
+    margin:0%;
+    margin-top: 5%;
+    color: white;
+}
 
 
 

@@ -47,22 +47,17 @@ public partial class Login : System.Web.UI.Page
     }
 
     protected void btnLogin_Click(object sender, EventArgs e)
-    {    
+    {
+        lblInfo.Text = "";
         try
         {           
             bool checkDB = CheckForUserDB(korisnickoIme.Text, lblInfo);
             PrincipalContext ADserv = new PrincipalContext(ContextType.Domain, "192.168.252.4", "sso.apprezervacije", "Nak0nN0ciD0laziDan");
-            UserPrincipal byUName = UserPrincipal.FindByIdentity(ADserv, IdentityType.UserPrincipalName, korisnickoIme.Text);
-                     
-            if (checkDB)
-            {
-                Session["squery"] = NewToken();
-                Session["user_id"] = korisnickoIme.Text;
-                Response.Redirect("Pocetna.aspx");
-                return;               
-            }          
-            
-            if (byUName != null)
+            UserPrincipal byUName = UserPrincipal.FindByIdentity(ADserv, IdentityType.SamAccountName, korisnickoIme.Text);
+
+            bool matchingCredentials = ADserv.ValidateCredentials(korisnickoIme.Text, passWord.Value);
+
+            if (byUName != null && matchingCredentials)
             {
                 bool userExistsInDB = CheckForUserAD(byUName, lblInfo);
 
@@ -71,7 +66,7 @@ public partial class Login : System.Web.UI.Page
                     try {
                         InputNewUser(byUName, lblInfo);
                         Session["squery"] = NewToken();
-                        Session["user_id"] = korisnickoIme.Text; // izmijeniti da dobavljamo samo korisnicko ime, a ne korisnicki ID u bazi
+                        Session["user_id"] = korisnickoIme.Text; 
                         Response.Redirect("Pocetna.aspx");
                     }
                     catch (Exception ec) { lblInfo.Text = "Pogreska pri unosu u bazu: "+ec.Message; }                                                    
@@ -85,7 +80,12 @@ public partial class Login : System.Web.UI.Page
                 }
             }
 
-            else { lblInfo.Text += "Nepostojeći korisnik - ukoliko zelite unijeti novog korisnika, kliknite \"Registracija\"."; }
+            else if (byUName != null && !matchingCredentials)
+            {
+                lblInfo.Text += "Korisničko ime i lozinka se ne podudaraju.";
+            }
+
+            else { lblInfo.Text += "Nepostojeći korisnik - Za pristup aplikaciji morate se registrirati."; }
             
         }
         catch (Exception ex) { lblInfo.Text = ex.Message; }
@@ -99,7 +99,7 @@ public partial class Login : System.Web.UI.Page
         SqlConnection connection = new SqlConnection(connectionString);
 
         SqlCommand cmd = new SqlCommand(sqlQuery, connection);
-        cmd.Parameters.AddWithValue("@UserName", uName.UserPrincipalName);
+        cmd.Parameters.AddWithValue("@UserName", uName.SamAccountName);
         try
         {
             cmd.Connection.Open();
@@ -141,7 +141,7 @@ public partial class Login : System.Web.UI.Page
         SqlConnection connection = new SqlConnection(connectionString);
         
         SqlCommand cmd = new SqlCommand(sqlQuery, connection);
-        cmd.Parameters.AddWithValue("@UserName", uName.UserPrincipalName);
+        cmd.Parameters.AddWithValue("@UserName", uName.SamAccountName);
         try {
             cmd.Connection.Open();
             userCount = Convert.ToInt32(cmd.ExecuteScalar());
@@ -160,7 +160,7 @@ public partial class Login : System.Web.UI.Page
         SqlCommand cmd = new SqlCommand("DataStorageUser", connection);
 
         cmd.CommandType = CommandType.StoredProcedure;
-        cmd.Parameters.AddWithValue("@KorisnickoIme", uName.UserPrincipalName);
+        cmd.Parameters.AddWithValue("@KorisnickoIme", uName.SamAccountName);
         cmd.Parameters.AddWithValue("@Ime", uName.GivenName);
         cmd.Parameters.AddWithValue("@Prezime", uName.Surname);
         cmd.Parameters.AddWithValue("@EmailAdresa", uName.EmailAddress);

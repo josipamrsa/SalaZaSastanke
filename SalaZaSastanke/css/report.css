@@ -1,0 +1,125 @@
+﻿body {
+    color: black;
+    font-family: Calibri;
+}
+
+table {
+    margin: 0%;
+    text-align: left;
+    background-color:  #fffdf3;
+    }
+
+button{  
+  position: fixed; 
+}
+
+#tblContent, #tblContent2 {
+    width: 85%;
+}
+
+.side-content {
+    position: fixed;   
+    background-color: #c8111e;
+    text-align:center;
+    padding:0px;
+    width:23%;
+    height:100%;
+    left:0;
+    top:0;
+    overflow: hidden;
+}
+
+.menu{
+  width:23%;
+  height:0px;
+  background-color: #c8111e;
+  position:fixed;
+  left:0;
+  margin-top: 5%;
+  border: none;
+  -webkit-transition: height 0.5s ease-in-out;
+  -moz-transition: height 0.5s ease-in-out;
+  -o-transition: height 0.5s ease-in-out;
+  transition: height 0.5s ease-in-out;
+  overflow: hidden;
+}
+
+.menu.is-visible{
+  width:23%;
+  height: 100%;
+  -webkit-transition: height 0.5s ease-in-out;
+  -moz-transition: height 0.5s ease-in-out;
+  -o-transition: height 0.5s ease-in-out;
+  transition: height 0.5s ease-in-out;
+}
+
+#menu-button {
+  background: none;
+  border: 0px;
+  padding: 10px;
+  color: white;
+  font-family: Calibri;
+  width: 10%;
+  left:0%;
+  top:10%;
+}
+
+#form1 {
+     margin-left: 25%;
+     margin-top: 2%;
+}
+
+#btnProf, #btnRez, #btnLogOut, #btnPoc {
+    background: #7d060e;
+    border: 0px;
+    border-bottom: 1px #3a0407; 
+    padding: 10px;
+    color: white;
+    font-family: Calibri;   
+    width:100%;
+    -webkit-transition: background 0.5s ease-in-out;
+    -moz-transition: background 0.5s ease-in-out;
+    -o-transition: background 0.5s ease-in-out;
+    transition: background 0.5s ease-in-out;
+}
+
+#btnPoc:hover, #btnRez:hover, #btnLogOut:hover, #btnProf:hover {
+    background: #fff5a4;    
+    color: #7d060e;  
+    -webkit-transition: background 0.5s ease-in-out;
+    -moz-transition: background 0.5s ease-in-out;
+    -o-transition: background 0.5s ease-in-out;
+    transition: background 0.5s ease-in-out; 
+}
+
+#btnLogOut {
+    background-color: #9f0b15;
+    border-bottom: 1px #7d060e;
+}
+
+h1 {
+    font-family: Calibri;
+    font-style: italic;
+    font-size: 40px;
+    color: #c8111e;
+    font-weight: lighter;
+}
+
+h2 {
+    font-family: Calibri;
+    color: #7d060e;
+    margin: 0%;
+    font-weight: lighter;
+    font-size: 20px;
+}
+
+#DropDownList1, #DropDownList2, #DropDownList3 {
+    border: 0px;
+    -webkit-box-shadow: inset 0 0 5px #808080;
+    -webkit-border-radius: 2px;
+    -moz-box-shadow: inset 0 0 5px #808080;
+    -moz-border-radius: 2px;
+    box-shadow: inset 0 0 5px #808080;
+    border-radius: 2px;
+    padding: 5px;
+}

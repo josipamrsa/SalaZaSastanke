@@ -1,6 +1,7 @@
 ﻿body {
     font-family: Calibri;
     color: black;
+
 }
 
 #GridView1, #GridView2 {
@@ -11,6 +12,25 @@
     width: 50%;
     text-align:left;
 
+}
+
+.side-content {
+    position: fixed;   
+    text-align:center;
+    width:22%;
+    height:100%;
+    left:0;
+    top:0;
+    overflow: hidden;    
+}
+
+img {
+    width: 250%;
+}
+
+#form1 {
+    margin-left: 25%;
+    margin-top: 0%;
 }
 
 #btnProvjeriDvorane, #btnEnd, #btnBack {
@@ -57,4 +77,10 @@ input {
     padding: 5px;
 }
 
-
+#DropDownList1 {
+    border: 0px;
+    padding: 5px;
+    -webkit-box-shadow: inset 0 0 2px #808080;
+    -moz-box-shadow: inset 0 0 2px #808080;
+    box-shadow: inset 0 0 2px #808080;
+}

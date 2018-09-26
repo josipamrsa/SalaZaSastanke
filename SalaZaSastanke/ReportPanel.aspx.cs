@@ -14,20 +14,28 @@ public partial class ReportPanel : System.Web.UI.Page
             string userRole = Session["user_role"].ToString();
             if (userRole == "report" || userRole == "admin")
             {
-                Label1.Text = "Dobrodošli u report panel";
+                lblTitle.Text = "<h1>Report panel</h1>";
+                lblTimestamp.Text = "Podaci i statistika za <b>" + DateTime.Now.Date.ToString("dddd, dd. MMMM yyyy.") + "</b>";
             }
 
             else
             {
-                Label1.Text = "Nemate ovlasti za pristupiti ovom dijelu aplikacije.";
-                LinkButton returnBtn = new LinkButton();
-                returnBtn.PostBackUrl = "Pocetna.aspx";
-                returnBtn.Text = "Povratak na početnu...";
-                form1.Controls.Add(returnBtn);
+                lblTitle.Text = "Nemate ovlasti za pristup ovom dijelu aplikacije.";
+                          
+                tblContent.Attributes["hidden"] = "true";
+                tblContent2.Attributes["hidden"] = "true";
             }
 
         }
 
         else { Response.Redirect("Login.aspx"); }
+
     }
+
+    protected void btnLogOut_Click(object sender, EventArgs e)
+    {
+        Session.Abandon();
+        Response.Redirect("Login.aspx");
+    }
+
 }

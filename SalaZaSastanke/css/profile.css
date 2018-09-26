@@ -18,15 +18,33 @@ h2 {
     font-size: 20px;
 }
 
-#btnPoc, #btnRez, #btnLogOut, #adminPanel, #reportPanel {
+#btnPoc, #btnRez, #btnLogOut, #reportPanel {
     background: #7d060e;
     border: 0px;
+    border-bottom: 1px #3a0407; 
     padding: 10px;
     color: white;
     font-family: Calibri;   
     width:100%;
+    -webkit-transition: background 0.5s ease-in-out;
+    -moz-transition: background 0.5s ease-in-out;
+    -o-transition: background 0.5s ease-in-out;
+    transition: background 0.5s ease-in-out;
 }
 
+#btnPoc:hover, #btnRez:hover, #btnLogOut:hover, #reportPanel:hover {
+    background: #fff5a4;    
+    color: #7d060e;   
+    -webkit-transition: background 0.5s ease-in-out;
+    -moz-transition: background 0.5s ease-in-out;
+    -o-transition: background 0.5s ease-in-out;
+    transition: background 0.5s ease-in-out;
+}
+
+#btnLogOut {
+    background-color: #9f0b15;
+    border-bottom: 1px #7d060e;
+}
 
 
 *{
@@ -38,8 +56,8 @@ h2 {
     position: fixed;   
     background-color: #c8111e;
     text-align:center;
-    padding:3px;
-    width:345px;
+    padding:0px;
+    width:23%;
     height:100%;
     left:0;
     top:0;
@@ -47,36 +65,38 @@ h2 {
 }
 
 .menu{
-  width:0px;
-  height:100%;
+  width:23%;
+  height:0px;
   background-color: #c8111e;
   position:fixed;
   left:0;
-  margin-top: 25%;
+  margin-top: 5%;
   border: none;
-  -webkit-transition: width 0.5s ease-in-out;
-  -moz-transition: width 0.5s ease-in-out;
-  -o-transition: width 0.5s ease-in-out;
-  transition: width 0.5s ease-in-out;
+  -webkit-transition: height 0.5s ease-in-out;
+  -moz-transition: height 0.5s ease-in-out;
+  -o-transition: height 0.5s ease-in-out;
+  transition: height 0.5s ease-in-out;
   overflow: hidden;
 }
 
 .menu.is-visible{
-  width:350px;
-  -webkit-transition: width 0.5s ease-in-out;
-    -moz-transition: width 0.5s ease-in-out;
-    -o-transition: width 0.5s ease-in-out;
-    transition: width 0.5s ease-in-out;
+  width:23%;
+  height: 100%;
+  -webkit-transition: height 0.5s ease-in-out;
+  -moz-transition: height 0.5s ease-in-out;
+  -o-transition: height 0.5s ease-in-out;
+  transition: height 0.5s ease-in-out;
 }
 
 #menu-button {
-  background: #c8111e;
+  background: none;
   border: 0px;
   padding: 10px;
   color: white;
   font-family: Calibri;
-  width: 15%;
-  right:0%;
+  width: 10%;
+  left:0%;
+  top:10%;
 }
 
 #tblInfo{
@@ -84,7 +104,7 @@ h2 {
     text-align: left;
     font-family: Calibri;
     color: #c8111e;  
-    width: 50%;
+    width: 85%;
 }
 
 th {
@@ -100,7 +120,6 @@ td {
 
 button{  
   position: fixed;
-  bottom:0%;  
 }
 
 #GridView1, #GridView2 {
@@ -108,7 +127,6 @@ button{
     font-family: Calibri;
     color: #c8111e;
     padding: 10px;
-    width: 85%;
     text-align:left;
 
 }

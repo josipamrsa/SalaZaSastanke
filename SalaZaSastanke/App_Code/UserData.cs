@@ -125,7 +125,7 @@ public class WebService : System.Web.Services.WebService
                 string sqlQuery = @"SELECT PeriodOd, PeriodDo, d.Lokacija, d.Adresa, d.NazivDvorane, p.PotvrdaID, r.OpisDogadjaja
                                 FROM Rezervacija r, Dvorana d, Potvrda p
                                 WHERE r.RezervacijaID = @IDRez AND p.Email = @Mail AND r.IDDvorana = d.DvoranaID 
-                                AND r.RezervacijaID = p.IDRezervacija AND p.KorisnikJeOdgovorio IS NULL";
+                                AND r.RezervacijaID = p.IDRezervacija AND p.KorisnikJeOdgovorio = 0";
 
                 string CS = ConfigurationManager.ConnectionStrings["Rezervacija"].ConnectionString;
                 using (SqlConnection con = new SqlConnection(CS))
@@ -161,7 +161,17 @@ public class WebService : System.Web.Services.WebService
             }
 
             JavaScriptSerializer js = new JavaScriptSerializer();
-            Context.Response.Write(js.Serialize(userInvitations));
+
+            if (userInvitations.Count == 0)
+            {
+                Context.Response.Write(js.Serialize("0"));
+            }
+
+            else
+            {
+                Context.Response.Write(js.Serialize(userInvitations));
+            }
+            
         }
 
         else

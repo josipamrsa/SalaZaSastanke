@@ -1,14 +1,14 @@
 ﻿/* Basic elements */
 
 body {
-    background: #fff;
+    background: #fff;   
 }
 
 
 /* Img */
 
 #tommy-logo {
-    width: 30%;
+    width: 35%;
 }
 
 
@@ -38,11 +38,16 @@ body {
 /* Content */
 
 #loginForm {
-    margin-top: 5%;    
-    text-align:center;
+    margin: 10%;
+    text-align: center;
 }
 
-#reVal1, #cVal1, #rfVal1 {
+#login-area, #error-area {
+    text-align: center;
+}
+
+
+#cVal1, #rfVal1 {
     color: #c8111e;
 }
 
@@ -52,15 +57,16 @@ body {
     color: #c8111e;
 }
 
-#lblKIme {
+#lblKIme, #lblPass {
     font-family: Calibri;
     color: #c8111e;
+
 }
 
 
 /* Input */
 
-#korisnickoIme {
+#korisnickoIme, #passWord {
     border: 0px;
     -webkit-box-shadow: inset 0 0 5px #808080;
     -webkit-border-radius: 2px;
@@ -69,4 +75,5 @@ body {
     box-shadow: inset 0 0 5px #808080;
     border-radius: 2px;
     padding: 5px;
+
 }

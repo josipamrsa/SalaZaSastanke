@@ -14,31 +14,37 @@
        
         <form id="form1" runat="server">                     
             <div class="side-content">
-                <asp:Label ID="loginInfo" runat="server" Text=""></asp:Label>                          
-            </div>   
-                  
-            <button ng-click="visible=!visible;" type="button" id="menu-button">Izbornik</button>           
-            <div ng-class="{'is-visible':visible}" class="menu"  ng-controller="mainController">                   
+                <p id="info">Trenutno ste ulogirani kao: </p>
+                <asp:Label ID="loginInfo" runat="server" Text=""></asp:Label>     
+                <br />                  
+                <a ng-click="visible=!visible;" type="button" id="menu-button">  
+                                    
+                    <div ng-if="visible">Sakrij izbornik &#9650;</div>
+                    <div ng-if="!visible">Prikaži izbornik &#9660;</div>
+                </a>
+
+             <div ng-class="{'is-visible':visible}" class="menu" ng-controller="mainController">                   
                     <input type="button" id="btnProf" value="Pregled profila" onclick="window.location='Profil.aspx'" />
                     <input type="button" id="btnRez" value="Rezervacija dvorane" onclick="window.location='Rezervacija.aspx'" />
-                    <asp:Button ID="btnLogOut" runat="server" OnClick="btnLogOut_Click" Text="Odjava" />  
-                
-                    <br /><br />  
-
-                    <h2>Admin/report paneli</h2>
-                    <input type="button" id="adminPanel" value="Admin panel" onclick="window.location='AdminPanel.aspx'"/>
-                    <input type="button" id="reportPanel" value="Report panel" onclick="window.location='ReportPanel.aspx'"/>                                                              
-                </div>                   
+                    <input type="button" id="reportPanel" value="Report panel" onclick="window.location='ReportPanel.aspx'"/>  
+                <br /><br /> 
+                    <asp:Button ID="btnLogOut" runat="server" OnClick="btnLogOut_Click" Text="Odjava" />                 
+                                                                                
+                </div>            
+            </div>   
+                        
             <div> 
                 
                 <h1><asp:Label ID="lblWelcome" runat="server" Text="test"></asp:Label></h1>
                
             </div>
 
-            <div id="notificationArea" runat="server" ng-controller="inviteController">
-                              
-                <div id="resNotifications" runat="server" ng-repeat="x in userInvite">  
-                                         
+            <div id="notificationArea" runat="server" ng-controller="inviteController">   
+                                                  
+                <div id="noNewEvents" ng-if="userInvite[1]=='0'">Nemate novih obavijesti.</div>
+                                
+                <div id="resNotifications" runat="server" ng-repeat="x in userInvite"> 
+                    
                     <table id="tblEvents" runat="server">     
                                 
                         <tr>

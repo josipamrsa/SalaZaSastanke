@@ -15,6 +15,38 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 
+/*
+ 
+     Event (PageLoad) - Provjerava je li korisnik ulogiran. Skriva određene funkcionalnosti dok korisnik ne ispuni tražene podatke
+     Postavlja minimalnu vrijednost DatePickera na današnji datum.
+
+     NewToken() - Ovdje generira random tokene za zabilježavanje pozivnica korisnicima.
+
+     Event (ProvjeraDvorana) - Provjerava unose korisnika. Sprema uneseno vrijeme početka i završetka te šalje dalje u
+     SQL upit. Otkriva skrivene kontrole vezane za daljnji nastavak unosa podataka.
+
+     getUserId() - Dohvaća ID korisnika iz baze za potrebe rezervacije dvorane
+
+     getUserEmail() - Dohvaća email adresu korisnika iz baze za potrebe stvaranja pozivnice sudioniku
+
+     usersToInvite() - Dohvaća listu korisničkih imena iz GridViewa koje je korisnik na formi označio za slanje poziva
+
+     sendInvitationConfirmation() - Pomoću liste korisničkih imena dohvaća email adrese svih označenih korisnika, te dohvaća
+     i email adrese koje je korisnik sam unio za slanje korisnicima koji nisu dio Tommyjeve mreže (tipa vanjski suradnici).
+     Tu se stvara i sama potvrda koja se sprema u bazu podataka, skupa sa tokenom odgovora.
+
+     Event (btnEnd) - Stvara se rezervacija, stvaraju se vezane potvrde te se šalju mailovi korisnicima koji su pozvani na sastanak
+
+     sendConfMail() - Dohvaća sve potvrde koje su stvorene prethodno, te uzima mail adresu svakog od sudionika (putem metode iz
+     WebService objekta) i šalje poruku s generiranim podacima te linkovima za odgovor. Kad korisnik klikne na jedan od linkova, 
+     vodi ga se na stranicu potvrde gdje se zabilježava njegov odgovor. Klikanjem više puta linkova u mailu korisnik može promijeniti
+     svoj odgovor, iako to nije iskodirano pri odgovoru na pozivnicu iz same aplikacije.
+
+     Event (btnBack) - Vraća na početnu stranicu.
+     
+     
+     
+     */
 public partial class Rezervacija : System.Web.UI.Page
 {  
     public bool Flag { get; set; }
@@ -63,6 +95,33 @@ public partial class Rezervacija : System.Web.UI.Page
     protected void btnProvjeriDvorane_Click(object sender, EventArgs e)
     {
         Label1.Text = "";
+        
+        if (eventDate.Value == "")
+        {
+            Label1.Text = "Molimo odaberite datum.";
+            return;
+        }
+
+        if (timeBegin.Value == "")
+        {
+            Label1.Text = "Molimo odaberite vrijeme početka.";
+            return;
+        }
+
+        if (timeEnd.Value == "")
+        {
+            Label1.Text = "Molimo odaberite vrijeme završetka.";
+            return;
+        }
+
+        if (DateTime.Parse(timeBegin.Value) > DateTime.Parse(timeEnd.Value))
+        {
+            Label1.Text = "Vrijeme završetka ne može biti ranije od vremena početka.";
+            return;
+        }
+
+        GridView1.DataBind();                       
+
         string timestampBegin = eventDate.Value + " " + timeBegin.Value;
         string timestampEnd = eventDate.Value + " " + timeEnd.Value;       
         
@@ -75,8 +134,8 @@ public partial class Rezervacija : System.Web.UI.Page
         btnEnd.Visible = true;
         par.Visible = true;
         par2.Visible = true;
-        par3.Visible = false;
-        emailInvite.Visible = true;
+        par3.Visible = true;
+        emailInvite.Visible = true;              
     }
 
     public string getUserID(string username)
@@ -165,7 +224,7 @@ public partial class Rezervacija : System.Web.UI.Page
         {
             foreach (string p in allParticipants)
             {
-
+                string id = NewToken();
                 string connectionString = ConfigurationManager.ConnectionStrings["Rezervacija"].ConnectionString;
                 SqlConnection connection = new SqlConnection(connectionString);
                 SqlCommand cmd = new SqlCommand("UserConfirmation", connection);
@@ -174,6 +233,7 @@ public partial class Rezervacija : System.Web.UI.Page
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Email", p);
                 cmd.Parameters.AddWithValue("@IDRez", rezID);
+                cmd.Parameters.AddWithValue("@TokenOdgovora", id);
 
                 try
                 {
@@ -238,16 +298,15 @@ public partial class Rezervacija : System.Web.UI.Page
 
         sendInvitationConfirmation(reservationID);
         sendConfMail(reservationID);
-
-        Response.Redirect("Pocetna.aspx");
-               
+        //Label1.Text = "Dvorana rezervirana. Pozivnice su poslane.";
+        Response.Redirect("Pocetna.aspx");              
     }
 
 
     private void sendConfMail(int rID)
     {       
         List<Participant> userInvitations = new List<Participant>();       
-        string sqlQuery = @"SELECT PeriodOd, PeriodDo,d.Lokacija, d.Adresa, d.NazivDvorane, p.PotvrdaID, p.Email, r.OpisDogadjaja
+        string sqlQuery = @"SELECT PeriodOd, PeriodDo,d.Lokacija, d.Adresa, d.NazivDvorane, p.TokenOdgovora, p.Email, r.OpisDogadjaja
                                 FROM Rezervacija r, Dvorana d, Potvrda p
                                 WHERE r.RezervacijaID = @IDRez AND r.IDDvorana = d.DvoranaID 
                                 AND r.RezervacijaID = p.IDRezervacija AND p.KorisnikJeOdgovorio = 0";
@@ -277,33 +336,48 @@ public partial class Rezervacija : System.Web.UI.Page
                 ps.address = rdr["Adresa"].ToString();
                 ps.hallName = rdr["NazivDvorane"].ToString();
                 ps.eventInfo = rdr["OpisDogadjaja"].ToString();
-                ps.confId = Convert.ToInt32(rdr["PotvrdaID"]);
+                ps.replyToken = rdr["TokenOdgovora"].ToString();
                 userInvitations.Add(ps);
             }
-        }       
+        }
+
+        /*
+
+       Inicijalne postavke
+
+       Smtp server: mail.tommy.hr
+       Server port: 465
+       Authentication type: SSL
+       E-mail: robot.aplikacije@tommy.hr
+       Username: robot.aplikacije@tommy.hr
+       Password: WN#6mVX4 
+       
+       TODO - provjeriti zasto SMTPS port ne radi (465) na ovoj masini        
+
+        */
 
         SmtpClient client = new SmtpClient();
         client.UseDefaultCredentials = false;
-        client.Host = "smtp.gmail.com";
-        client.Port = 587;
+        client.Host = "mail.tommy.hr";       
+        client.Port = 25; 
         client.EnableSsl = true;
-        client.Credentials = new NetworkCredential("whatusernameisalloweddarn@gmail.com", "a1b2c3d4@");   
-                    
+        client.Credentials = new NetworkCredential("robot.aplikacije@tommy.hr", "WN#6mVX4");    
+
         foreach (Participant p in userInvitations)
         {
             try
             {
                 LinkButton confirm = new LinkButton();
-                LinkButton cancel = new LinkButton();
+                LinkButton decline = new LinkButton();
 
                 MailMessage mm = new MailMessage();
-                mm.From = new MailAddress("user@tommy.hr");
+                mm.From = new MailAddress("robot.aplikacije@tommy.hr");
 
                 string baseUrl = Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/');
-                string replyToken = NewToken();
+                string replyToken = p.replyToken;
 
-                confirm.PostBackUrl = baseUrl + "/Potvrda.aspx?replyToken=" + replyToken + "&userReplied=1&userAttending=1&confirmationId=" + p.confId;
-                cancel.PostBackUrl = baseUrl + "/Potvrda.aspx?replyToken=" + replyToken + "&userReplied=1&userAttending=0&confirmationId=" + p.confId;
+                confirm.PostBackUrl = baseUrl + "/Potvrda.aspx?replyToken=" + replyToken + "&userAttending=1";
+                decline.PostBackUrl = baseUrl + "/Potvrda.aspx?replyToken=" + replyToken + "&&userAttending=0";
 
                 mm.To.Add(new MailAddress(p.userName));
                 mm.Subject = "Obavijest o pozivu na sastanak";
@@ -312,22 +386,16 @@ public partial class Rezervacija : System.Web.UI.Page
                             + "Mjesto sastanka je " + p.address + ", " + p.location + ", u dvorani " + p.hallName + ".<br>"
                             + "Tema sastanka je " + p.eventInfo + ".<br>"
                             + "Da biste prihvatili ili odbili poziv, molimo Vas da kliknete jednu od poveznica ispod.<br><br>"
-                            + "<a href='" + baseUrl + "/Potvrda.aspx?replyToken=" + replyToken + "&userReplied=1&userAttending=1&confirmationId=" + p.confId + "'>Potvrdi dolazak</a>"
-                            + " | <a href='" + baseUrl + "/Potvrda.aspx?replyToken=" + replyToken + "&userReplied=1&userAttending=0&confirmationId=" + p.confId + "'>Odbij pozivnicu</a>";
+                            + "<a href='" + baseUrl + "/Potvrda.aspx?replyToken=" + replyToken + "&userAttending=1'>Potvrdi dolazak</a>"
+                            + " | <a href='" + baseUrl + "/Potvrda.aspx?replyToken=" + replyToken + "&&userAttending=0'>Odbij pozivnicu</a>";
 
                 client.Send(mm);
             }
 
-            catch
-            {               
-                                                    
-            }
-                           
-        }
-        
+            catch {}                          
+        }       
     }
-
-    
+  
     protected void btnBack_Click(object sender, EventArgs e)
     {
         Response.Redirect("Pocetna.aspx");

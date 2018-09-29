@@ -5,6 +5,14 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
+/*
+ 
+     Event (PageLoad) - Provjerava ulogiranost i razinu korisnika. Korisnik nema pravo pristupa ako je uloge "user".
+
+     U elementima na stranici se izvršavaju upiti bazi o raznoraznim statistikama oko dvorana i korisnika.
+     
+     */
+
 public partial class ReportPanel : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
@@ -21,7 +29,7 @@ public partial class ReportPanel : System.Web.UI.Page
             else
             {
                 lblTitle.Text = "Nemate ovlasti za pristup ovom dijelu aplikacije.";
-                          
+                                          
                 tblContent.Attributes["hidden"] = "true";
                 tblContent2.Attributes["hidden"] = "true";
             }

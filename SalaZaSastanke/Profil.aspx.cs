@@ -5,6 +5,15 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
+/*
+ 
+    Event (PageLoad) - Provjerava ulogiranost korisnika, broji redove GridViewa za aktivnost korisnika, na temelju njihovog
+    odgovora (true/false) mijenja podatak u Dolazim/Ne dolazim.
+    
+    Event (BtnLogOut) - Odlogirava korisnika iz aplikacije.     
+     
+     
+     */
 public partial class Profil : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)

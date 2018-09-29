@@ -27,10 +27,12 @@
                 <input id="passWord" type="password" runat="server"/><br />
 
                 <br /><br />
-                <asp:Button ID="btnLogin" runat="server" OnClick="btnLogin_Click" Text="Log in" Height="29px" Width="91px" />
+                <asp:Button ID="btnLogin" runat="server" OnClick="btnLogin_Click" Text="Prijava" Height="29px" Width="91px" />
 
                 <asp:RequiredFieldValidator ID="rfVal1" runat="server" ControlToValidate="korisnickoIme" ErrorMessage="Unesite vaše korisničko ime!">*</asp:RequiredFieldValidator>   
                 <asp:CustomValidator ID="cVal1" runat="server" ControlToValidate="korisnickoIme" ErrorMessage="Nepostojeći korisnik - ukoliko zelite unijeti novog korisnika, kliknite &quot;Registracija&quot;.">*</asp:CustomValidator>  
+
+                <asp:RequiredFieldValidator ID="rfVal2" runat="server" ControlToValidate="passWord" ErrorMessage="Molimo unesite lozinku!">*</asp:RequiredFieldValidator>
 
             </div>
 

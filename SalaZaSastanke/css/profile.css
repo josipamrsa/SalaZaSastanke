@@ -18,7 +18,7 @@ h2 {
     font-size: 20px;
 }
 
-#btnPoc, #btnRez, #btnLogOut, #reportPanel {
+#btnPoc, #btnRez, #btnLogOut, #reportPanel, #adminPanel {
     background: #7d060e;
     border: 0px;
     border-bottom: 1px #3a0407; 
@@ -32,7 +32,7 @@ h2 {
     transition: background 0.5s ease-in-out;
 }
 
-#btnPoc:hover, #btnRez:hover, #btnLogOut:hover, #reportPanel:hover {
+#btnPoc:hover, #btnRez:hover, #btnLogOut:hover, #reportPanel:hover, #adminPanel:hover {
     background: #fff5a4;    
     color: #7d060e;   
     -webkit-transition: background 0.5s ease-in-out;

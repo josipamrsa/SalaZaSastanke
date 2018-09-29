@@ -10,7 +10,10 @@ using System.Data.SqlClient;
 using System.Web.Script.Serialization;
 
 /// <summary>
-/// Summary description for WebService
+/// 
+/// WebService za AngularJS skripte. Sadrži metodu koja dohvaća podatke o trenutno ulogiranom korisniku, te metodu
+/// koja dohvaća sve neodgovorene pozivnice korisnika. Ima pomoćne metode dohvata ID rezervacije te email adrese korisnika.
+/// 
 /// </summary>
 [WebService(Namespace = "http://tempuri.org/")]
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
@@ -122,7 +125,7 @@ public class WebService : System.Web.Services.WebService
 
             foreach (int i in reservationID)
             {
-                string sqlQuery = @"SELECT PeriodOd, PeriodDo, d.Lokacija, d.Adresa, d.NazivDvorane, p.PotvrdaID, r.OpisDogadjaja
+                string sqlQuery = @"SELECT PeriodOd, PeriodDo, d.Lokacija, d.Adresa, d.NazivDvorane, p.TokenOdgovora, r.OpisDogadjaja
                                 FROM Rezervacija r, Dvorana d, Potvrda p
                                 WHERE r.RezervacijaID = @IDRez AND p.Email = @Mail AND r.IDDvorana = d.DvoranaID 
                                 AND r.RezervacijaID = p.IDRezervacija AND p.KorisnikJeOdgovorio = 0";
@@ -152,7 +155,7 @@ public class WebService : System.Web.Services.WebService
                         ps.address = rdr["Adresa"].ToString();
                         ps.hallName = rdr["NazivDvorane"].ToString();
                         ps.eventInfo = rdr["OpisDogadjaja"].ToString();
-                        ps.confId = Convert.ToInt32(rdr["PotvrdaID"]);
+                        ps.replyToken = rdr["TokenOdgovora"].ToString();
                         userInvitations.Add(ps);
                     }
                 }

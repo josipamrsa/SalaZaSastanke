@@ -26,6 +26,7 @@
              <div ng-class="{'is-visible':visible}" class="menu" ng-controller="mainController">                   
                     <input type="button" id="btnProf" value="Pregled profila" onclick="window.location='Profil.aspx'" />
                     <input type="button" id="btnRez" value="Rezervacija dvorane" onclick="window.location='Rezervacija.aspx'" />
+                    <input type="button" id="adminPanel" value="Admin panel" onclick="window.location='AdminPanel.aspx'" />
                     <input type="button" id="reportPanel" value="Report panel" onclick="window.location='ReportPanel.aspx'"/>  
                 <br /><br /> 
                     <asp:Button ID="btnLogOut" runat="server" OnClick="btnLogOut_Click" Text="Odjava" />                 
@@ -85,7 +86,7 @@
                         </tr>
               
                     </table>                 
-                    <input id="ModalId" type="hidden" runat="server" value="{{x.confId}}"/> 
+                    <input id="ModalId" type="hidden" runat="server" value="{{x.replyToken}}"/> 
                     <br />
 
                 </div>   

@@ -14,9 +14,7 @@
        <img src="img/stock1.jpg" />
    </div>
     <form id="form1" runat="server">  
-
-        
-
+       
         <h1>Rezervacija dvorane za sastanak</h1>
         Unesite datum sastanka: <input type="date" runat="server" id="eventDate"/><br />
         Unesite termin (od-do): 
@@ -34,17 +32,14 @@
         <asp:Button ID="btnBack" runat="server" Text="Povratak na početnu" CausesValidation="False" OnClick="btnBack_Click"/>
         </p>
     
-        <span id="par3" runat="server">Lista dostupnih dvorana za odabrani datum:</span> 
-    
-        <br />
-        <asp:DropDownList ID="DropDownList1" runat="server" DataSourceID="DostupneDvorane" DataTextField="NazivDvorane" DataValueField="DvoranaID">
-        </asp:DropDownList>
-&nbsp;<p>
-            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataKeyNames="DvoranaID" DataSourceID="DostupneDvorane" GridLines="None">
+        <asp:Label ID="Label1" runat="server"></asp:Label>
+
+       <span id="par3" runat="server">Lista dostupnih dvorana za odabrani datum:</span><br /><br />
+            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataKeyNames="DvoranaID" DataSourceID="DostupneDvorane" GridLines="None" EmptyDataText="Nema dostupnih dvorana.">
                 <Columns>
                     <asp:BoundField DataField="Lokacija" HeaderText="Lokacija" SortExpression="Lokacija" />
                     <asp:BoundField DataField="Adresa" HeaderText="Adresa" SortExpression="Adresa" />
-                    <asp:BoundField DataField="NazivDvorane" HeaderText="NazivDvorane" SortExpression="NazivDvorane" />
+                    <asp:BoundField DataField="NazivDvorane" HeaderText="Naziv dvorane" SortExpression="NazivDvorane" />
                 </Columns>
                 <RowStyle Wrap="True" />
             </asp:GridView>
@@ -54,8 +49,14 @@
                     <asp:SessionParameter DefaultValue="" Name="PeriodDo" SessionField="time-end" />
                 </SelectParameters>
             </asp:SqlDataSource>
-        <p>      <br />    
+        
+            <br />
+        <div id="userArea" runat="server"> 
+            <asp:DropDownList ID="DropDownList1" runat="server" DataSourceID="DostupneDvorane" DataTextField="NazivDvorane" DataValueField="DvoranaID" AutoPostBack="True">
+        </asp:DropDownList>
+&nbsp;<p>   
             <span id="par" runat="server">Pozovite sudionike na sastanak:</span><p>
+                
             <asp:GridView ID="GridView2" runat="server" AllowPaging="True" AutoGenerateColumns="False" DataKeyNames="KorisnikID" DataSourceID="DostupniKorisnici" GridLines="None">
                 <Columns>
                     <asp:TemplateField HeaderText="Korisničko ime">
@@ -90,6 +91,8 @@
                 </UpdateParameters>
             </asp:ObjectDataSource>
         <p>
+            
+        <p>
             <br />
 
             <span id="par2" runat="server">Ili pozovite korisnike putem email adrese (adrese odvajajte zarezom):</span> <br />
@@ -97,11 +100,11 @@
             <br />
         <p>
 
-        <asp:Label ID="Label1" runat="server"></asp:Label>
+        
 
         <p>
             <asp:Button ID="btnEnd" runat="server" OnClick="btnEnd_Click" Text="Završi" />
-            
+            </div>  
 
     </form>
 

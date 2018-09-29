@@ -25,6 +25,7 @@
 
             <input type="button" id="btnPoc" value="Početna" onclick="window.location='Pocetna.aspx'"/>
             <input type="button" id="btnRez" value="Rezervacija dvorane" onclick="window.location='Rezervacija.aspx'"/>
+            <input type="button" id="adminPanel" value="Admin panel" onclick="window.location='AdminPanel.aspx'" />
             <input type="button" id="reportPanel" value="Report panel" onclick="window.location='ReportPanel.aspx'"/>
             <br /><br /> 
             <asp:Button ID="btnLogOut" runat="server" OnClick="btnLogOut_Click" Text="Odjava" />           

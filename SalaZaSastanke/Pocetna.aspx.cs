@@ -11,6 +11,26 @@ using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
 
+/*
+ 
+     Event (PageLoad) - Provjera je li se korisnik ulogirao, dohvat uloge korisnika za neke dijelove aplikacije, 
+     pozdrav korisniku na temelju doba dana. Ukoliko neulogirani korisnik pokuša pristupiti, vraća ga se na login
+     formu.
+
+     Event (btnLogOut) - Odlogirava korisnika iz aplikacije.
+
+     getTimeOfDay() - Dohvaća trenutno vrijeme te na temelju toga formira pozdrav korisniku.
+
+     getUserRole() - Dohvaća ulogu korisnika na temelju trenutno ulogiranog.
+
+     updateConfirmation() - Na početnoj stranici prikazuju se svi pozivi korisniku od drugih korisnika. Ova metoda
+     služi za spremanje korisničkog odgovora na temelju koje je dugme pritisnuo (Prihvati/Odbij). Token odgovora dohvaća
+     iz skrivene kontrole za svaku obavijest. Možda postoji bolji način za to dohvatiti?
+
+     Events (btnPotvrdi, btnOdbij) - dohvaća token odgovora te ga šalje skupa s korisničkim odgovorom (Dolazi/Ne dolazi)
+     
+*/
+
 public partial class Pocetna : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
@@ -55,29 +75,7 @@ public partial class Pocetna : System.Web.UI.Page
         }
             
     }
-
-    private static string NewToken()
-    {
-        using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
-        {
-            byte[] randomBuffer = new byte[32];
-            rng.GetBytes(randomBuffer);
-
-            using (MD5 md5 = MD5.Create())
-            {
-                byte[] hashBytes = md5.ComputeHash(randomBuffer);
-
-                StringBuilder sBuilder = new StringBuilder();
-                foreach (byte byt in hashBytes)
-                {
-                    sBuilder.Append(byt.ToString("x2"));
-                }
-
-                return sBuilder.ToString();
-            }
-        }
-    }
-
+   
     private string getUserRole()
     {
         string userId = Session["user_id"].ToString();
@@ -105,19 +103,18 @@ public partial class Pocetna : System.Web.UI.Page
         return userRole;              
 
     }
-    private void updateConfirmation(int id, int userConf, int userReply)
-    {
-        string replyToken = NewToken();
+    private void updateConfirmation(string id, int userConf, int userReply)
+    {       
         string connectionString = ConfigurationManager.ConnectionStrings["Rezervacija"].ConnectionString;
         
         SqlConnection connection = new SqlConnection(connectionString);
         SqlCommand cmd = new SqlCommand("UserReply", connection);
 
         cmd.CommandType = CommandType.StoredProcedure;
-        cmd.Parameters.AddWithValue("@PotvrdaId", id);
+
         cmd.Parameters.AddWithValue("@KorisnikDolazi", userConf);
         cmd.Parameters.AddWithValue("@KorisnikJeOdgovorio", userReply);
-        cmd.Parameters.AddWithValue("@TokenOdgovora", replyToken);
+        cmd.Parameters.AddWithValue("@TokenOdgovora", id);
 
         cmd.Connection.Open();
         cmd.ExecuteNonQuery();
@@ -126,14 +123,14 @@ public partial class Pocetna : System.Web.UI.Page
       
     protected void btnPotvrdi_Click(object sender, EventArgs e)
     {
-        int id = int.Parse(ModalId.Value);
+        string id = ModalId.Value;
         updateConfirmation(id, 1, 1);
         lblInfo.Text = "Potvrdili ste dolazak. Vaš odgovor naknadno možete promijeniti sa profila.";
     }
 
     protected void btnOdbij_Click(object sender, EventArgs e)
     {
-        int id = int.Parse(ModalId.Value);
+        string id = ModalId.Value;
         updateConfirmation(id, 0, 1);
         lblInfo.Text = "Odbili ste poziv. Vaš odgovor naknadno možete promijeniti sa profila.";
     }

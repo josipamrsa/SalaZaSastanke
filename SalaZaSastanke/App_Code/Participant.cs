@@ -15,7 +15,7 @@ public class Participant
     public string location { get; set; }
     public string address { get; set; }
     public string hallName { get; set; }
-    public int confId { get; set; }
+    public string replyToken { get; set; }
     public string eventInfo { get; set; }
     public Participant()
     {

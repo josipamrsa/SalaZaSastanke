@@ -95,7 +95,7 @@ td {
   top:10%;
 }
 
-#btnProf, #btnRez, #btnLogOut, #reportPanel {
+#btnProf, #btnRez, #btnLogOut, #reportPanel, #adminPanel {
     background: #7d060e;
     border: 0px;
     border-bottom: 1px #3a0407; 
@@ -109,7 +109,7 @@ td {
     transition: background 0.5s ease-in-out;
 }
 
-#btnProf:hover, #btnRez:hover, #btnLogOut:hover, #reportPanel:hover {
+#btnProf:hover, #btnRez:hover, #btnLogOut:hover, #reportPanel:hover, #adminPanel:hover {
     background: #fff5a4;    
     color: #7d060e;   
     -webkit-transition: background 0.5s ease-in-out;

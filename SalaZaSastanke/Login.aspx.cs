@@ -16,6 +16,23 @@ using System.Data;
 using System.Data.SqlClient;
 
 
+/*
+ 
+    NewToken() - Generira token za prijavu na sustav - čisto da se zna je li korisnik ulogiran ili ne. Koristi se u kombinaciji s 
+    imenom korisnika.
+
+    Event (btnLogIn) - Provjerava postoji li korisnik na serveru te provjerava podudaraju li se podaci s onima na serveru. Ako ne postoji, 
+    a postoji na serveru, tada sa servera vuče podatke u bazu lokalno kod prve prijave.
+
+    GetUserId() - dohvaća ID korisnika u bazi
+
+    CheckForUserAD() - provjerava postoji li korisnik lokalno putem podataka iz AD servera
+
+    InputNewUser() - ukoliko se korisnik prvi puta prijavljuje u aplikaciju, onda se pokreće ova metoda za dohvaćanje i spremanje
+    podataka s AD servera lokalno u bazu.    
+     
+*/
+
 public partial class Login : System.Web.UI.Page
 {
     public static string NewToken()
@@ -50,8 +67,7 @@ public partial class Login : System.Web.UI.Page
     {
         lblInfo.Text = "";
         try
-        {           
-            bool checkDB = CheckForUserDB(korisnickoIme.Text, lblInfo);
+        {                      
             PrincipalContext ADserv = new PrincipalContext(ContextType.Domain, "192.168.252.4", "sso.apprezervacije", "Nak0nN0ciD0laziDan");
             UserPrincipal byUName = UserPrincipal.FindByIdentity(ADserv, IdentityType.SamAccountName, korisnickoIme.Text);
 
@@ -69,7 +85,7 @@ public partial class Login : System.Web.UI.Page
                         Session["user_id"] = korisnickoIme.Text; 
                         Response.Redirect("Pocetna.aspx");
                     }
-                    catch (Exception ec) { lblInfo.Text = "Pogreska pri unosu u bazu: "+ec.Message; }                                                    
+                    catch (Exception ec) { lblInfo.Text = "Pogreška pri unosu u bazu: "+ec.Message; }                                                    
                 }
 
                 else
@@ -111,28 +127,7 @@ public partial class Login : System.Web.UI.Page
 
         return uid;
     }
-
-    public bool CheckForUserDB(string username, Label lblMessage)
-    {
-        int userCount = 0;
-        string connectionString = ConfigurationManager.ConnectionStrings["Rezervacija"].ConnectionString;
-        string sqlQuery = "SELECT COUNT(1) FROM Korisnik WHERE KorisnickoIme = @UserName";
-        SqlConnection connection = new SqlConnection(connectionString);
-
-        SqlCommand cmd = new SqlCommand(sqlQuery, connection);
-        cmd.Parameters.AddWithValue("@UserName", username);
-        try
-        {
-            cmd.Connection.Open();
-            userCount = Convert.ToInt32(cmd.ExecuteScalar());
-        }
-        catch (Exception ex) { lblMessage.Text = ex.Message; }
-        finally { cmd.Connection.Close(); }
-
-        if (userCount == 1) return true;
-        else return false;
-    }
-
+  
     public bool CheckForUserAD(UserPrincipal uName, Label lblMessage)
     {
         int userCount = 0;

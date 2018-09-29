@@ -24,6 +24,7 @@
                     <input type="button" id="btnPoc" value="Početna" onclick="window.location='Pocetna.aspx'"/>               
                     <input type="button" id="btnProf" value="Pregled profila" onclick="window.location='Profil.aspx'" />
                     <input type="button" id="btnRez" value="Rezervacija dvorane" onclick="window.location='Rezervacija.aspx'" />
+                    <input type="button" id="adminPanel" value="Admin panel" onclick="window.location='AdminPanel.aspx'" />
                     <br /><br />    
                     <asp:Button ID="btnLogOut" runat="server" OnClick="btnLogOut_Click" Text="Odjava" />                                                                     
                 </div>    
@@ -156,10 +157,7 @@
                         <AlternatingItemTemplate>
                             <tr style="">
                                 <td>
-                                    <asp:Label ID="ImeLabel" runat="server" Text='<%# Eval("Ime") %>' />
-                                </td>
-                                <td>
-                                    <asp:Label ID="PrezimeLabel" runat="server" Text='<%# Eval("Prezime") %>' />
+                                    <asp:Label ID="EmailLabel" runat="server" Text='<%# Eval("Email") %>' />
                                 </td>
                             </tr>
                         </AlternatingItemTemplate>
@@ -170,10 +168,7 @@
                                     <asp:Button ID="CancelButton" runat="server" CommandName="Cancel" Text="Cancel" />
                                 </td>
                                 <td>
-                                    <asp:TextBox ID="ImeTextBox" runat="server" Text='<%# Bind("Ime") %>' />
-                                </td>
-                                <td>
-                                    <asp:TextBox ID="PrezimeTextBox" runat="server" Text='<%# Bind("Prezime") %>' />
+                                    <asp:TextBox ID="EmailTextBox" runat="server" Text='<%# Bind("Email") %>' />
                                 </td>
                             </tr>
                         </EditItemTemplate>
@@ -188,23 +183,17 @@
                             <tr style="">
                                 <td>
                                     <asp:Button ID="InsertButton" runat="server" CommandName="Insert" Text="Insert" />
-                                    <asp:Button ID="CancelButton0" runat="server" CommandName="Cancel" Text="Clear" />
+                                    <asp:Button ID="CancelButton" runat="server" CommandName="Cancel" Text="Clear" />
                                 </td>
                                 <td>
-                                    <asp:TextBox ID="ImeTextBox0" runat="server" Text='<%# Bind("Ime") %>' />
-                                </td>
-                                <td>
-                                    <asp:TextBox ID="PrezimeTextBox0" runat="server" Text='<%# Bind("Prezime") %>' />
+                                    <asp:TextBox ID="EmailTextBox" runat="server" Text='<%# Bind("Email") %>' />
                                 </td>
                             </tr>
                         </InsertItemTemplate>
                         <ItemTemplate>
                             <tr style="">
                                 <td>
-                                    <asp:Label ID="ImeLabel0" runat="server" Text='<%# Eval("Ime") %>' />
-                                </td>
-                                <td>
-                                    <asp:Label ID="PrezimeLabel0" runat="server" Text='<%# Eval("Prezime") %>' />
+                                    <asp:Label ID="EmailLabel" runat="server" Text='<%# Eval("Email") %>' />
                                 </td>
                             </tr>
                         </ItemTemplate>
@@ -214,8 +203,7 @@
                                     <td runat="server">
                                         <table id="itemPlaceholderContainer" runat="server" border="0" style="">
                                             <tr runat="server" style="">
-                                                <th runat="server">Ime</th>
-                                                <th runat="server">Prezime</th>
+                                                <th runat="server">Email sudionika koji dolaze</th>
                                             </tr>
                                             <tr id="itemPlaceholder" runat="server">
                                             </tr>
@@ -226,7 +214,7 @@
                                     <td runat="server" style="">
                                         <asp:DataPager ID="DataPager1" runat="server">
                                             <Fields>
-                                                <asp:NextPreviousPagerField ButtonType="Button" ShowFirstPageButton="True" ShowLastPageButton="True" />
+                                                <asp:NextPreviousPagerField ButtonType="Button" ShowFirstPageButton="True" ShowLastPageButton="True" ButtonCssClass="prev-next" />
                                             </Fields>
                                         </asp:DataPager>
                                     </td>
@@ -236,16 +224,13 @@
                         <SelectedItemTemplate>
                             <tr style="">
                                 <td>
-                                    <asp:Label ID="ImeLabel1" runat="server" Text='<%# Eval("Ime") %>' />
-                                </td>
-                                <td>
-                                    <asp:Label ID="PrezimeLabel1" runat="server" Text='<%# Eval("Prezime") %>' />
+                                    <asp:Label ID="EmailLabel" runat="server" Text='<%# Eval("Email") %>' />
                                 </td>
                             </tr>
                         </SelectedItemTemplate>
                     </asp:ListView>
                     <br />
-                    <asp:SqlDataSource ID="ListaSudionika" runat="server" ConnectionString="<%$ ConnectionStrings:Rezervacija %>" SelectCommand="SELECT k.Ime, k.Prezime FROM Korisnik AS k INNER JOIN Potvrda AS p ON k.EmailAdresa = p.Email CROSS JOIN Rezervacija AS r WHERE (p.IDRezervacija = @Rezervacija) AND (p.KorisnikDolazi = 'true')">
+                    <asp:SqlDataSource ID="ListaSudionika" runat="server" ConnectionString="<%$ ConnectionStrings:Rezervacija %>" SelectCommand="SELECT Email FROM Potvrda AS P WHERE (IDRezervacija = @Rezervacija) AND (KorisnikDolazi = 'true')">
                         <SelectParameters>
                             <asp:ControlParameter ControlID="DropDownList3" Name="Rezervacija" PropertyName="SelectedValue" />
                         </SelectParameters>

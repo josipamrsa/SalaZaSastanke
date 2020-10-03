@@ -68,7 +68,7 @@ public partial class Login : System.Web.UI.Page
         lblInfo.Text = "";
         try
         {                      
-            PrincipalContext ADserv = new PrincipalContext(ContextType.Domain, "192.168.252.4", "sso.apprezervacije", "Nak0nN0ciD0laziDan");
+            PrincipalContext ADserv = new PrincipalContext(ContextType.Domain, "", "", ""); // login data
             UserPrincipal byUName = UserPrincipal.FindByIdentity(ADserv, IdentityType.SamAccountName, korisnickoIme.Text);
 
             bool matchingCredentials = ADserv.ValidateCredentials(korisnickoIme.Text, passWord.Value);
